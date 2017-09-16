@@ -5,8 +5,8 @@ body {
 .dragspace {
 	margin: 80px auto;
 	border: 5px black solid;
-	width: 75rem;
-	height: 40rem;
+	width: 1200px;
+	height: 640px;
 	position: relative;
 }
 
@@ -14,6 +14,7 @@ body {
 	position: absolute;
 	border: none;
 	padding: 0;
+	cursor: move;
 }
 
 .rectangle:focus {
@@ -41,5 +42,35 @@ body {
 .button:hover {
 	color: #00e676;
 	border-color: #00e676;
+}
+
+.resize {
+	position: absolute;
+    width: 20px;
+    height: 20px;
+}
+
+.ne {
+	right: -10px;
+    top: -10px;
+    cursor: nesw-resize;
+}
+
+.se {
+	right: -10px;
+    bottom: -10px;
+    cursor: nwse-resize;
+}
+
+.sw {
+	left: -10px;
+    bottom: -10px;
+    cursor: nesw-resize;
+}
+
+.nw {
+	left: -10px;
+    top: -10px;
+    cursor: nwse-resize;
 }
 
