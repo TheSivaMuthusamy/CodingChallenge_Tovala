@@ -1,0 +1,45 @@
+body {
+	margin: 0;
+}
+
+.dragspace {
+	margin: 80px auto;
+	border: 5px black solid;
+	width: 75rem;
+	height: 40rem;
+	position: relative;
+}
+
+.rectangle {
+	position: absolute;
+	border: none;
+	padding: 0;
+}
+
+.rectangle:focus {
+	outline: none;
+	border: 2px solid #4fc3f7;
+	box-shadow: 0 0 10px #4fc3f7;
+}
+
+.controls {
+	background-color: #002f6c;
+	height: 75px;
+}
+
+.button {
+	color: #fff;
+	border: 2px solid #fff;
+	border-radius: 10px;
+	text-align: center;
+	font-size: 18px;
+	margin-left: 20px;
+	cursor: pointer; 
+	background-color: transparent;
+}
+
+.button:hover {
+	color: #00e676;
+	border-color: #00e676;
+}
+
