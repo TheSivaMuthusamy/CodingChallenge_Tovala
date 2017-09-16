@@ -14,10 +14,6 @@ export default class Rectangle extends React.Component {
 			<button className='rectangle' style={this.props.rect} 
 			onFocus={() => this.props.selectRect(this.props.rect)}
 			onBlur={this.props.deselectRect}>
-			<div>derp</div>
-			<div>derp</div>
-			<div>derp</div>
-			<div>derp</div>
 			</button>
 		)
 	}
