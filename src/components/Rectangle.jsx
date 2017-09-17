@@ -1,16 +1,13 @@
 import React from 'react';
 
 export default class Rectangle extends React.Component {	
-	constructor(props) {
-		super(props);
-		this.state = {
-			rect: this.props.rect
-		}
+	constructor() {
+		super();
 	}
 
 	render() {
 		return(
-			<button className='rectangle' style={this.state.rect} 
+			<button className='rectangle' style={this.props.rect} 
 			onMouseDown={(e) => this.props.onMouseDown(e, this.props.rect)}
 			onMouseUp={this.props.onMouseUp}
 			onMouseMove={this.props.onMouseMove}
