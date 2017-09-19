@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class Rectangle extends React.Component {	
 	constructor() {
@@ -40,4 +41,16 @@ export default class Rectangle extends React.Component {
 			</button>
 		)
 	}
+}
+
+Rectangle.propTypes = {
+	onMouseDown: PropTypes.func,
+	onMouseLeave: PropTypes.func,
+	onMouseMove: PropTypes.func,
+	onMouseMoveNW: PropTypes.func,
+	onMouseMoveNE: PropTypes.func,
+	onMouseMoveSW: PropTypes.func,
+	onMouseMoveSE: PropTypes.func,
+	onMouseUp: PropTypes.func,
+	rect: PropTypes.object
 }

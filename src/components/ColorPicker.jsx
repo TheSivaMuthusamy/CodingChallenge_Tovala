@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class ColorPicker extends React.Component {
 	constructor() {
@@ -40,8 +41,9 @@ export default class ColorPicker extends React.Component {
 	}
 
 	render() {
+		const style = (this.props.colorMenuVisible) ? {} : {visibility: 'hidden'}
 		return (
-			<div className="picker">
+			<div className='picker' style={style}>
 				<div style={{padding: '15px 9px 9px 15px'}}>
 					{this.props.colors.map((color, key) => {
 						const background = "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")"
@@ -54,11 +56,21 @@ export default class ColorPicker extends React.Component {
 					})}
 					<div className="placeHolder">#</div>
 					<div className="inputWrapper">
-						<input className="colorInput" value={this.state.value} 
-						onChange={(e) => this.onChange(e.target.value)} onKeyDown={this.props.onKeyDown}/>
+						<input className="colorInput" value={this.state.value}
+						placeholder="Enter Hex Value..." 
+						onChange={(e) => this.onChange(e.target.value)} 
+						onKeyDown={this.props.onKeyDown}/>
 					</div>
 				</div>
 			</div>
 		)
 	}
+}
+
+ColorPicker.propTypes = {
+	activeRect: PropTypes.object,
+	colorMenuVisible: PropTypes.bool,
+	colors: PropTypes.array,
+	onClick: PropTypes.func,
+	onKeyDown: PropTypes.func
 }

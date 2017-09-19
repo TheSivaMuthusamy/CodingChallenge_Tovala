@@ -1,10 +1,17 @@
 body {
 	margin: 0;
 	font-family: Roboto;
+	text-align: center;
+}
+
+ul, li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .dragspace {
-	margin: 80px auto;
+	margin: 15px auto 15px auto;
 	border: 5px black solid;
 	width: 1200px;
 	height: 640px;
@@ -24,12 +31,19 @@ body {
 	box-shadow: 0 0 10px #4fc3f7;
 }
 
-.controls {
+.controls-wrapper {
+	text-align: center;
+	padding-top: 30px;
+}
+
+.header {
 	background-color: #002f6c;
-	height: 75px;
+	height: 75px;	
 }
 
 .button {
+	width: 174.34px;
+	height: 30px;
 	color: #fff;
 	border: 2px solid #fff;
 	border-radius: 10px;
@@ -38,13 +52,16 @@ body {
 	margin-left: 20px;
 	cursor: pointer; 
 	background-color: transparent;
+	outline: none;
 }
 
 .button:hover {
 	color: #00e676;
 	border-color: #00e676;
 }
-
+.controls {
+	display: inline-block;
+}
 .resize {
 	position: absolute;
     width: 20px;
@@ -77,9 +94,25 @@ body {
 
 .picker {
 	width: 276px;
-    background: rgb(255, 255, 255);
+    background: rgb(235, 235, 235);
     border: 0px solid rgba(0, 0, 0, 0.25);
     border-radius: 4px;
+    position: absolute;
+    z-index: 9999;
+    padding-bottom: 5px;
+    bottom: 80px;
+    left: 6px
+}
+
+.picker::after {
+	content: "";
+    position: absolute;
+    bottom: -20%;
+    left: 10%;
+    margin-left: -5px;
+    border-width: 9px;
+    border-style: solid;
+    border-color: rgb(235, 235, 235) transparent transparent transparent;
 }
 
 .swatch {
@@ -120,4 +153,174 @@ body {
     border-radius: 0px 4px 4px 0px;
     float: left;
     padding-left: 8px;
+}
+
+.load-menu {
+	width: 174.34px;
+	position: absolute;
+	z-index: 9999;
+	background: rgb(235, 235, 235);
+    border: 0px solid rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+    bottom: 80px;
+    left: 16px;
+}
+
+/*.load-menu:after {
+	content: "";
+    position: absolute;
+    bottom: -40%;
+    left: 10%;
+    margin-left: -5px;
+    border-width: 9px;
+    border-style: solid;
+    border-color: rgb(235, 235, 243) transparent transparent transparent;
+}*/
+
+.new {
+	width: 800px;
+	margin: 0 auto;
+}
+
+.control-container {
+	display: inline-block;
+	position: relative;
+}
+
+.alternate {
+	vertical-align: 2px;
+}
+
+.actions {
+	height: 75px;
+	width: 75px;
+	fill: #EC407A;
+	cursor: pointer;
+}
+
+.actions:hover {
+	fill: #F48FB1;
+}
+
+.actions:hover + .tooltip{
+	visibility: visible;
+	opacity: 1;
+}
+
+.actions + .tooltip {
+	visibility: hidden;
+    position: absolute;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity .6s;
+    left: -22px;
+    top: 74px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.tooltip::after {
+	content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #555 transparent;
+}
+
+.clear {
+	background-color: #EC407A;
+	fill: #FFF;
+	border: 0px solid rgba(0, 0, 0, 0.25);
+	border-radius: 100px;
+	height: 62.5px;
+    width: 62.5px; 
+    margin: 8.25px 6.25px 3.75px 6.25px
+}
+
+.clear:hover {
+	fill: #fff;
+	background-color: #F48FB1;
+}
+
+.clear + .tooltip {
+	top: 76px;
+}
+
+.save-input {
+	width: 200px;
+    font-size: 16px;
+    color: rgb(102, 102, 102);
+    border-width: 0px 0px 2px 0px;
+    border-color: rgb(102, 102, 102);
+    outline: none;
+    height: 28px;
+    padding-left: 8px;
+    display: inline-block;
+    vertical-align: 18.25px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.load-wrapper {
+	text-align: left;
+}
+
+.load-wrapper:hover {
+	background-color: rgb(200, 200, 200);
+	border: 0px solid rgba(0, 0, 0, 0.25);
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.layout {
+	display: inline-block;
+	vertical-align: 2px;
+	padding-left: 5px;
+	width: 80%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.remove-layout {
+	visibility: hidden;
+	opacity: 0;
+    transition: opacity .6s;
+	display: inline-block;
+}
+
+.load-wrapper:hover .remove-layout {
+	visibility: visible;
+	opacity: 1;
+}
+
+.pointer {
+	width: 0px; 
+	height: 0px; 
+	border-style: solid; 
+	border-width: 11px 11px 11px 11px; 
+	border-color: rgb(235, 235, 235) transparent transparent transparent; 
+	position: absolute; 
+	top: -3px; 
+	right: 27px;
+}
+
+.error-message {
+	visibility: hidden;
+	position: absolute;
+	font-size: 12px;
+	color: red;
 }

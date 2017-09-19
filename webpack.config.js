@@ -7,19 +7,37 @@ module.exports = {
 		filename: 'bundle.js',
 	},
 	module: {
-		loaders: [
-		{
-			test: /\.jsx*$/,
-			exclude: /(node_modules)/,
-			loader: 'babel-loader', 
-		  	query: {
-				presets: ['env','react']
-		  	}
-		},
-		{
-			test: /\.(css)$/,
-			loader: 'style-loader!css-loader'
-		},
+		rules: [
+			{
+				test: /\.jsx*$/,
+				exclude: /(node_modules)/,
+				loader: 'babel-loader', 
+			  	query: {
+					presets: ['env','react']
+			  	}
+			},
+			{
+				test: /\.(css)$/,
+				loader: 'style-loader!css-loader'
+			},
+			{
+	      		test: /\.(png|jpg|)$/,
+	      		loader: 'url-loader?limit=200000'
+	    	},
+	    	{
+	    		test: /\.svg$/,
+	    		loaders: [
+				    {
+				    	loader: 'babel-loader',
+				      	query: {
+				        	presets: ['env', 'react']
+				      	}
+				    },
+				    {
+				      	loader: 'react-svg-loader',
+				    }
+				]
+	    	}
 	  	]
 	},
 	devServer : {
