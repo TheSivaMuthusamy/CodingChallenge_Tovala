@@ -190,6 +190,9 @@ ul, li {
     border-radius: 6px;
     z-index: 1;
     opacity: 0;
+    -webkit-font-smoothing: antialiased;
+    -webkit-transition: opacity .6s;
+    -moz-transition: opacity .6s;
     transition: opacity .6s;
     left: -22px;
     top: 74px;
@@ -267,6 +270,8 @@ ul, li {
 .remove-layout {
 	visibility: hidden;
 	opacity: 0;
+	-webkit-transition: opacity .6s;
+    -moz-transition: opacity .6s;
     transition: opacity .6s;
 	display: inline-table;
 	height: 19px;
