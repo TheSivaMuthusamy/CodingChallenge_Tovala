@@ -9,7 +9,6 @@ import Color from '../../images/color.svg';
 import Save from '../../images/save.svg';
 import Load from '../../images/load.svg';
 
-
 export default class App extends React.Component {
 	constructor() {
 		super();
@@ -33,7 +32,7 @@ export default class App extends React.Component {
 			colorMenuVisible: false,
 			loadMenuVisible: false,
 			errorMsg: false,
-			mfired: false,
+			mfired: false
 		};
 		this.state = this.getFromStorage(initialState);
 		this.colors = this.colors.bind(this);
@@ -128,7 +127,7 @@ export default class App extends React.Component {
         	array.splice(index, 1);
     	}
 
-    	return array	
+    	return array;	
 	}
 
 	checkHex(color) {
@@ -140,24 +139,24 @@ export default class App extends React.Component {
 		// Helper function that checks to make sure rectangle is within bounds in the x-axis.
 		// Returns an int
 		if (x + parseInt(rect.width, 10) > 1200) {
-			return 1200 - parseInt(rect.width,10)
+			return 1200 - parseInt(rect.width,10);
 		} else if (x < 0) {
-			return 0
+			return 0;
 		}
 
-		return x
+		return x;
 	}
 
 	checkYBounds(y, rect) {
 		// Helper function that checks to make sure rectangle is within bounds in the y-axis.
 		// Returns an int
 		if (y + parseInt(rect.height, 10) > 640) {
-			return 640 - parseInt(rect.height,10)
+			return 640 - parseInt(rect.height,10);
 		} else if (y < 0) {
-			return 0
+			return 0;
 		}
 
-		return y
+		return y;
 	}
 
 	addRectangle(e) {
@@ -175,7 +174,7 @@ export default class App extends React.Component {
 		const newState = this.state.rects.concat(rect);
 		this.setState({
 			rects: newState
-		})
+		});
 		e.stopPropagation()
 		e.preventDefault()
 	}
@@ -184,12 +183,12 @@ export default class App extends React.Component {
 		// Removes selected rectangle from the dragspace
 		if(Object.getOwnPropertyNames(this.state.activeRect).length == 0) return
 
-		const newState = this.remove(this.state.rects.slice(0), this.state.activeRect)
+		const newState = this.remove(this.state.rects.slice(0), this.state.activeRect);
 
 		this.setState({
 			rects: newState,
 			activeRect: {}
-		})
+		});
 		e.stopPropagation()
 		e.preventDefault()
 	}
@@ -199,12 +198,12 @@ export default class App extends React.Component {
 			console.log(e)
 			this.setState({
 				activeRect: {}
-			})
+			});
 		
 		} else {
 			this.setState({
 				mfired: false
-			})
+			});
 		}
 	}
 
@@ -214,7 +213,7 @@ export default class App extends React.Component {
 		this.setState({
 			rects: [],
 			activeRect: {}
-		})
+		});
 		e.stopPropagation()
 		e.preventDefault()
 	}	
@@ -222,16 +221,16 @@ export default class App extends React.Component {
 	onSelectColor(color, e) {
 		// Changes color of selected rectangle
 		if (Object.getOwnPropertyNames(this.state.activeRect).length == 0) return
-		const rect = Object.assign({},this.state.activeRect)
-		const clone = (this.state.rects).slice(0)
-	  	const index = clone.indexOf(this.state.activeRect)
-	  	rect.backgroundColor = color
-	  	clone[index] = rect
+		const rect = Object.assign({},this.state.activeRect);
+		const clone = (this.state.rects).slice(0);
+	  	const index = clone.indexOf(this.state.activeRect);
+	  	rect.backgroundColor = color;
+	  	clone[index] = rect;
 	  	
 	  	this.setState({
 	  		rects: clone,
 	  		activeRect: rect
-	  	})
+	  	});
 
 	  	e.stopPropagation()
 		e.preventDefault();
@@ -252,7 +251,7 @@ export default class App extends React.Component {
 			initLeft: rect.left,
 			activeRect: rect,
 			mfired: true,
-		})
+		});
 		
 		e.stopPropagation()
 		e.preventDefault();
@@ -264,26 +263,26 @@ export default class App extends React.Component {
   			resizing: false,
   			dragging: false,
   			mfired: false,
-  		})
+  		});
   	}
 
   	onMouseMove(e) {
   		// Handles dragging logic on mouse movement
   		if(!this.state.dragging) return
   			
-  			const rect = Object.assign({},this.state.activeRect)
-	  		const clone = (this.state.rects).slice(0)
-	  		const index = clone.indexOf(this.state.activeRect)
+  			const rect = Object.assign({},this.state.activeRect);
+	  		const clone = (this.state.rects).slice(0);
+	  		const index = clone.indexOf(this.state.activeRect);
 	  		const nX = (parseInt(this.state.initLeft,10) + e.pageX - this.state.rel.x);
 	  		const nY = (parseInt(this.state.initTop,10) + e.pageY - this.state.rel.y);
-	  		rect.left = this.checkXBounds(nX, this.state.activeRect) + 'px'
-	  		rect.top = this.checkYBounds(nY, this.state.activeRect) + 'px'
-	  		clone[index] = rect
+	  		rect.left = this.checkXBounds(nX, this.state.activeRect) + 'px';
+	  		rect.top = this.checkYBounds(nY, this.state.activeRect) + 'px';
+	  		clone[index] = rect;
 	  		
 	  		this.setState({
 	  			rects: clone,
 	  			activeRect: rect
-	  		})
+	  		});
   		
   		e.stopPropagation()
     	e.preventDefault()
@@ -293,24 +292,24 @@ export default class App extends React.Component {
   		// Handler for top right corner of rectangle. Handles reisizing logic
   		if (!this.state.resizing) return
   			
-  			const rect = Object.assign({},this.state.activeRect)
+  			const rect = Object.assign({},this.state.activeRect);
 	  		const nWidth = (parseInt(this.state.initWidth,10) + e.pageX - this.state.rel.x);											
 	  		const nHeight = (parseInt(this.state.initHeight,10) - e.pageY + this.state.rel.y);
 	  		const nTop = (parseInt(this.state.initTop,10) + e.pageY - this.state.rel.y);
-	  		const clone = (this.state.rects).slice(0)
-	  		const index = clone.indexOf(this.state.activeRect)
+	  		const clone = (this.state.rects).slice(0);
+	  		const index = clone.indexOf(this.state.activeRect);
 	  		rect.width = (nWidth + parseInt(this.state.activeRect.left,10) > 1200) ? 
 	  											(1200 - parseInt(this.state.activeRect.left,10) + 'px') 
-	  											: (nWidth + 'px')
+	  											: (nWidth + 'px');
 	 
-	  		rect.top = (nTop < 0) ? (0 + 'px') : (nTop + 'px')
-	  		rect.height = (nTop < 0)? this.state.activeRect.height : (nHeight + 'px')
-	  		clone[index] = rect
+	  		rect.top = (nTop < 0) ? (0 + 'px') : (nTop + 'px');
+	  		rect.height = (nTop < 0)? this.state.activeRect.height : (nHeight + 'px');
+	  		clone[index] = rect;
 	  		
 	  		this.setState({
 	  			rects: clone,
 	  			activeRect: rect
-	  		})
+	  		});
   		
   		e.stopPropagation()
     	e.preventDefault()
@@ -320,23 +319,23 @@ export default class App extends React.Component {
   		// Handler for bottom right corner of rectangle. Handles reisizing logic
   		if (!this.state.resizing) return
   			
-  			const rect = Object.assign({},this.state.activeRect)
+  			const rect = Object.assign({},this.state.activeRect);
   			const nWidth = (parseInt(this.state.initWidth,10) + e.pageX - this.state.rel.x);
 	  		const nHeight = (parseInt(this.state.initHeight,10) + e.pageY - this.state.rel.y);
-	  		const clone = (this.state.rects).slice(0)
-	  		const index = clone.indexOf(this.state.activeRect)
+	  		const clone = (this.state.rects).slice(0);
+	  		const index = clone.indexOf(this.state.activeRect);
 	  		rect.width = (nWidth + parseInt(this.state.activeRect.left,10) > 1200) ? 
 	  												(1200 - parseInt(this.state.activeRect.left,10) + 'px') 
-	  												: (nWidth + 'px')
+	  												: (nWidth + 'px');
 	  		rect.height = (nHeight + parseInt(this.state.activeRect.top,10) > 640) ?
 	  												(640 - parseInt(this.state.activeRect.top,10) + 'px') 
-	  												: (nHeight + 'px')								  	
-	  		clone[index] = rect
+	  												: (nHeight + 'px');								  	
+	  		clone[index] = rect;
 	  		
 	  		this.setState({
 	  			rects: clone,
 	  			activeRect: rect
-	  		})
+	  		});
   		
   		e.stopPropagation()
     	e.preventDefault()
@@ -346,19 +345,19 @@ export default class App extends React.Component {
   		// Handler for bottom left corner of rectangle. Handles reisizing logic
   		if (!this.state.resizing) return
   			
-  			const rect = Object.assign({},this.state.activeRect)
+  			const rect = Object.assign({},this.state.activeRect);
   			const nWidth = parseInt(this.state.initWidth,10) - e.pageX + this.state.rel.x;
   			const nLeft = (parseInt(rect.left,10) < 0) ? 0 
   									: (parseInt(this.state.initLeft,10) + e.pageX - this.state.rel.x);
   			const nHeight = (parseInt(this.state.initHeight,10) + e.pageY - this.state.rel.y);
-	  		const clone = (this.state.rects).slice(0)
-	  		const index = clone.indexOf(this.state.activeRect)
+	  		const clone = (this.state.rects).slice(0);
+	  		const index = clone.indexOf(this.state.activeRect);
 	  		rect.height = (nHeight + parseInt(this.state.activeRect.top,10) > 640) ?
 	  												(640 - parseInt(this.state.activeRect.top,10) + 'px') 
-	  												: (nHeight + 'px')
-	  		rect.left = (nLeft < 0) ? (0 + 'px') : (nLeft + 'px')
-	  		rect.width = (nLeft < 0) ? this.state.activeRect.width : (nWidth + 'px')
-	  		clone[index] = rect
+	  												: (nHeight + 'px');
+	  		rect.left = (nLeft < 0) ? (0 + 'px') : (nLeft + 'px');
+	  		rect.width = (nLeft < 0) ? this.state.activeRect.width : (nWidth + 'px');
+	  		clone[index] = rect;
 	  		
 	  		this.setState({
 	  			rects: clone,
@@ -373,23 +372,23 @@ export default class App extends React.Component {
   		// Handler for top right corner of rectangle. Handles reisizing logic
   		if (!this.state.resizing) return
   			
-  			const rect = Object.assign({},this.state.activeRect)
+  			const rect = Object.assign({},this.state.activeRect);
   			const nWidth = (parseInt(this.state.initWidth,10) - e.pageX + this.state.rel.x);
   			const nLeft = (parseInt(this.state.initLeft,10) + e.pageX - this.state.rel.x);
   			const nHeight = (parseInt(this.state.initHeight,10) - e.pageY + this.state.rel.y);
 	  		const nTop = (parseInt(this.state.initTop,10) + e.pageY - this.state.rel.y);
-	  		const clone = (this.state.rects).slice(0)
-	  		const index = clone.indexOf(this.state.activeRect)
-	  		rect.top = (nTop < 0) ? (0 + 'px') : (nTop + 'px')
-	  		rect.height = (nTop < 0)? this.state.activeRect.height : (nHeight + 'px')
-	  		rect.left = (nLeft < 0) ? (0 + 'px') : (nLeft + 'px')
-	  		rect.width = (nLeft < 0) ? this.state.activeRect.width : (nWidth + 'px')
-	  		clone[index] = rect
+	  		const clone = (this.state.rects).slice(0);
+	  		const index = clone.indexOf(this.state.activeRect);
+	  		rect.top = (nTop < 0) ? (0 + 'px') : (nTop + 'px');
+	  		rect.height = (nTop < 0)? this.state.activeRect.height : (nHeight + 'px');
+	  		rect.left = (nLeft < 0) ? (0 + 'px') : (nLeft + 'px');
+	  		rect.width = (nLeft < 0) ? this.state.activeRect.width : (nWidth + 'px');
+	  		clone[index] = rect;
 	  		
 	  		this.setState({
 	  			rects: clone,
 	  			activeRect: rect
-	  		})
+	  		});
   		
   		e.stopPropagation()
     	e.preventDefault()
@@ -400,7 +399,7 @@ export default class App extends React.Component {
   		this.setState({
   			resizing: false,
   			dragging: false,
-  		})
+  		});
   		
   		e.stopPropagation()
     	e.preventDefault()
@@ -410,16 +409,16 @@ export default class App extends React.Component {
   		// Allows enter to key to set background of rectangle
   		if(e.keyCode === 13 && this.state.activeRect !== null && this.checkHex('#' + e.target.value)) {
 	  		
-	  		const rect = Object.assign({},this.state.activeRect)
-			const clone = (this.state.rects).slice(0)
-		  	const index = clone.indexOf(this.state.activeRect)
-		  	rect.backgroundColor = '#' + e.target.value
-		  	clone[index] = rect
+	  		const rect = Object.assign({},this.state.activeRect);
+			const clone = (this.state.rects).slice(0);
+		  	const index = clone.indexOf(this.state.activeRect);
+		  	rect.backgroundColor = '#' + e.target.value;
+		  	clone[index] = rect;
 		  	
 		  	this.setState({
 		  		rects: clone,
 		  		activeRect: rect
-		  	})
+		  	});
 
   		}
   	}
@@ -428,21 +427,21 @@ export default class App extends React.Component {
   		// Saves current layout to state
   		if(this.state.saveName == '') return
   		
-  		const nHist = {[this.state.saveName] : this.state.rects}
-  		const clone = this.state.history.slice(0)
-  		clone.push(nHist)
-  		console.log(this.checkIfSaveNameExists(this.state.saveName))
+  		const nHist = {[this.state.saveName] : this.state.rects};
+  		const clone = this.state.history.slice(0);
+  		clone.push(nHist);
+  		console.log(this.checkIfSaveNameExists(this.state.saveName));
   		if(!this.checkIfSaveNameExists(this.state.saveName)) {
 	  		this.setState({
 	  			history: clone,
 	  			saveName: '',
 	  			errorMsg: false
-	  		})
+	  		});
 	  	} else {
 	  		this.setState({
 	  			saveName:'',
 	  			errorMsg: true
-	  		})
+	  		});
 	  	}
   		
   		e.stopPropagation()
@@ -454,7 +453,7 @@ export default class App extends React.Component {
   		this.setState({
   			rects: Object.values(layout)[0],
   			activeRect: {}
-  		})
+  		});
   		
   		e.stopPropagation()
 		e.preventDefault()
@@ -462,18 +461,18 @@ export default class App extends React.Component {
 
   	removeLayout(layout, e) {
   		// Removes a saved layout from state
-  		const nHist = this.remove(this.state.history.slice(0), layout)
+  		const nHist = this.remove(this.state.history.slice(0), layout);
 
   		if (nHist.length == 0) {
 			this.setState({
 				loadMenuVisible: false
-			})
+			});
 		}
 		
 
 		this.setState({
 			history: nHist
-		})
+		});
 		
 		e.stopPropagation()
 		e.preventDefault()
@@ -483,7 +482,7 @@ export default class App extends React.Component {
   		// Handler for value change in
   		this.setState({
   			saveName: e.target.value
-  		})
+  		});
   		
   		e.stopPropagation()
 		e.preventDefault()
@@ -502,11 +501,11 @@ export default class App extends React.Component {
 
   	toggleColorMenu(e) {
   		// Toggles visiblity of color picker
-  		const menuVisible = !this.state.colorMenuVisible
+  		const menuVisible = !this.state.colorMenuVisible;
 
   		this.setState({
   			colorMenuVisible: menuVisible
-  		})
+  		});
 
   		e.stopPropagation()
 		e.preventDefault()
@@ -516,7 +515,7 @@ export default class App extends React.Component {
   		if (Object.getOwnPropertyNames(this.state.activeRect).length <= 0) {
 	  		this.setState({
 	  			colorMenuVisible: false
-	  		})
+	  		});
 	  	}
   		e.stopPropagation()
 		e.preventDefault()
@@ -526,11 +525,11 @@ export default class App extends React.Component {
   		// Toggles visiblity of saved layouts
   		if (!this.state.history.length > 0) return
  
-  		const menuVisible = !this.state.loadMenuVisible
+  		const menuVisible = !this.state.loadMenuVisible;
 
   		this.setState({
   			loadMenuVisible: menuVisible
-  		})
+  		});
 
   		e.stopPropagation()
 		e.preventDefault()
@@ -540,7 +539,7 @@ export default class App extends React.Component {
   		if (Object.getOwnPropertyNames(this.state.activeRect).length <= 0) {
 	  		this.setState({
 	  			loadMenuVisible: false
-	  		})
+	  		});
 	  	}
   		e.stopPropagation()
   		e.preventDefault()
