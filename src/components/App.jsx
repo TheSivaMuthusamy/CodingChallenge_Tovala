@@ -195,7 +195,6 @@ export default class App extends React.Component {
 
 	deselectRect(e) {
 		if (!this.state.mfired) {
-			console.log(e)
 			this.setState({
 				activeRect: {}
 			});
@@ -430,7 +429,6 @@ export default class App extends React.Component {
   		const nHist = {[this.state.saveName] : this.state.rects};
   		const clone = this.state.history.slice(0);
   		clone.push(nHist);
-  		console.log(this.checkIfSaveNameExists(this.state.saveName));
   		if(!this.checkIfSaveNameExists(this.state.saveName)) {
 	  		this.setState({
 	  			history: clone,
@@ -547,7 +545,6 @@ export default class App extends React.Component {
 
   	handleOutsideClick(e) {
   		// Handles clicksoutside selected components
-  		console.log(e)
   		this.deselectRect(e)
   		this.deselectColorMenu(e)
   		this.deselectLoadMenu(e)
