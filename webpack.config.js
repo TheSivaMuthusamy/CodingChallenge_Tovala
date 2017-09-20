@@ -21,10 +21,6 @@ var config = {
 				test: /\.(css)$/,
 				loader: 'style-loader!css-loader'
 			},
-			{
-	      		test: /\.(png|jpg|)$/,
-	      		loader: 'url-loader?limit=200000'
-	    	},
 	    	{
 	    		test: /\.svg$/,
 	    		loaders: [
