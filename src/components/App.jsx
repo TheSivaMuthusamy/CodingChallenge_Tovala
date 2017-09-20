@@ -15,7 +15,7 @@ export default class App extends React.Component {
 		super();
 		const initialState = {
 			rects: [],
-			activeRect: null,
+			activeRect: {},
 			resizing: false,
 			dragging: false,
 			rel : {
@@ -32,7 +32,8 @@ export default class App extends React.Component {
 			saveName: '',
 			colorMenuVisible: false,
 			loadMenuVisible: false,
-			errorMsg: false
+			errorMsg: false,
+			mfired: false,
 		};
 		this.state = this.getFromStorage(initialState);
 		this.colors = this.colors.bind(this);
@@ -43,6 +44,7 @@ export default class App extends React.Component {
 		this.checkYBounds = this.checkYBounds.bind(this);
 		this.addRectangle = this.addRectangle.bind(this);
 		this.removeRectangle = this.removeRectangle.bind(this);
+		this.deselectRect = this.deselectRect.bind(this);
 		this.clearField = this.clearField.bind(this);
 		this.onSelectColor = this.onSelectColor.bind(this);
 		this.onMouseLeave = this.onMouseLeave.bind(this)
@@ -56,9 +58,22 @@ export default class App extends React.Component {
 		this.saveLayout = this.saveLayout.bind(this);
 		this.loadLayout = this.loadLayout.bind(this);
 		this.onSaveChange = this.onSaveChange.bind(this);
+		this.onSaveClick = this.onSaveClick.bind(this)
 		this.onSaveEnter = this.onSaveEnter.bind(this);
 		this.toggleColorMenu = this.toggleColorMenu.bind(this);
+		this.deselectColorMenu = this.deselectColorMenu.bind(this);
 		this.toggleLoadMenu = this.toggleLoadMenu.bind(this);
+		this.deselectLoadMenu = this.deselectLoadMenu.bind(this);
+		this.handleOutsideClick = this.handleOutsideClick.bind(this);
+		this.checkIfSaveNameExists = this.checkIfSaveNameExists.bind(this);
+	}
+
+	componentDidMount() {
+		this.setState({
+			activeRect: {},
+			loadMenuVisible: false,
+			colorMenuVisible: false
+		})
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -83,7 +98,6 @@ export default class App extends React.Component {
 		// Writes a state to local storage
 		try {
 			const persistantState = JSON.stringify(state);
-			console.log(persistantState)
 			localStorage.setItem('state', persistantState)
 		} catch(err) {
 
@@ -146,7 +160,7 @@ export default class App extends React.Component {
 		return y
 	}
 
-	addRectangle() {
+	addRectangle(e) {
 		// Adds rectangle to dragspace with a random state
 		const rwidth = this.getRandomInt(32, 320);
 		const rheight = this.getRandomInt(32, 320);
@@ -162,33 +176,52 @@ export default class App extends React.Component {
 		this.setState({
 			rects: newState
 		})
+		e.stopPropagation()
+		e.preventDefault()
 	}
 
-	removeRectangle() {
+	removeRectangle(e) {
 		// Removes selected rectangle from the dragspace
-		if(this.state.activeRect == null) return
+		if(Object.getOwnPropertyNames(this.state.activeRect).length == 0) return
 
 		const newState = this.remove(this.state.rects.slice(0), this.state.activeRect)
 
 		this.setState({
 			rects: newState,
-			activeRect: null
+			activeRect: {}
 		})
+		e.stopPropagation()
+		e.preventDefault()
+	}
+
+	deselectRect(e) {
+		if (!this.state.mfired) {
+			console.log(e)
+			this.setState({
+				activeRect: {}
+			})
+		
+		} else {
+			this.setState({
+				mfired: false
+			})
+		}
 	}
 
 
-	clearField() {
+	clearField(e) {
 		// Clears all rectangles from the dragspace
 		this.setState({
 			rects: [],
-			activeRect: null
+			activeRect: {}
 		})
+		e.stopPropagation()
+		e.preventDefault()
 	}	
 
-	onSelectColor(color) {
+	onSelectColor(color, e) {
 		// Changes color of selected rectangle
-		if (this.state.activeRect == null) return
-		
+		if (Object.getOwnPropertyNames(this.state.activeRect).length == 0) return
 		const rect = Object.assign({},this.state.activeRect)
 		const clone = (this.state.rects).slice(0)
 	  	const index = clone.indexOf(this.state.activeRect)
@@ -199,6 +232,9 @@ export default class App extends React.Component {
 	  		rects: clone,
 	  		activeRect: rect
 	  	})
+
+	  	e.stopPropagation()
+		e.preventDefault();
 	}
 
 	onMouseDown(rect, e) {
@@ -214,7 +250,8 @@ export default class App extends React.Component {
 			initHeight: rect.height,
 			initTop: rect.top,
 			initLeft: rect.left,
-			activeRect: rect
+			activeRect: rect,
+			mfired: true,
 		})
 		
 		e.stopPropagation()
@@ -225,7 +262,8 @@ export default class App extends React.Component {
   		// Sets certain values to false so resizing can't happen after mouse leaves the area
   		this.setState({
   			resizing: false,
-  			dragging: false
+  			dragging: false,
+  			mfired: false,
   		})
   	}
 
@@ -361,7 +399,7 @@ export default class App extends React.Component {
   		// Sets certain state values to false after mouse up event
   		this.setState({
   			resizing: false,
-  			dragging: false
+  			dragging: false,
   		})
   		
   		e.stopPropagation()
@@ -382,38 +420,63 @@ export default class App extends React.Component {
 		  		rects: clone,
 		  		activeRect: rect
 		  	})
+
   		}
   	}
 
-  	saveLayout() {
+  	saveLayout(e) {
   		// Saves current layout to state
   		if(this.state.saveName == '') return
   		
   		const nHist = {[this.state.saveName] : this.state.rects}
   		const clone = this.state.history.slice(0)
   		clone.push(nHist)
+  		console.log(this.checkIfSaveNameExists(this.state.saveName))
+  		if(!this.checkIfSaveNameExists(this.state.saveName)) {
+	  		this.setState({
+	  			history: clone,
+	  			saveName: '',
+	  			errorMsg: false
+	  		})
+	  	} else {
+	  		this.setState({
+	  			saveName:'',
+	  			errorMsg: true
+	  		})
+	  	}
   		
-  		this.setState({
-  			history: clone,
-  			saveName: ''
-  		})
+  		e.stopPropagation()
+		e.preventDefault()
   	}
 
-  	loadLayout(layout) {
+  	loadLayout(layout, e) {
   		// Loads a layout from state
   		this.setState({
   			rects: Object.values(layout)[0],
-  			activeRect: null
+  			activeRect: {}
   		})
+  		
+  		e.stopPropagation()
+		e.preventDefault()
   	}
 
-  	removeLayout(layout) {
+  	removeLayout(layout, e) {
   		// Removes a saved layout from state
   		const nHist = this.remove(this.state.history.slice(0), layout)
+
+  		if (nHist.length == 0) {
+			this.setState({
+				loadMenuVisible: false
+			})
+		}
+		
 
 		this.setState({
 			history: nHist
 		})
+		
+		e.stopPropagation()
+		e.preventDefault()
   	}
 
   	onSaveChange(e) {
@@ -421,23 +484,45 @@ export default class App extends React.Component {
   		this.setState({
   			saveName: e.target.value
   		})
+  		
+  		e.stopPropagation()
+		e.preventDefault()
+  	}
+
+  	onSaveClick(e) {
+  		// Prevents deselect rect from firing
+  		e.stopPropagation()
+		e.preventDefault()
   	}
 
   	onSaveEnter(e) {
   		// Allows enter key to set name of saved layout
-  		if(e.keyCode === 13) this.saveLayout()
+  		if(e.keyCode === 13) this.saveLayout(e)
   	}
 
-  	toggleColorMenu() {
+  	toggleColorMenu(e) {
   		// Toggles visiblity of color picker
   		const menuVisible = !this.state.colorMenuVisible
 
   		this.setState({
   			colorMenuVisible: menuVisible
   		})
+
+  		e.stopPropagation()
+		e.preventDefault()
   	}
 
-  	toggleLoadMenu() {
+  	deselectColorMenu(e) {
+  		if (Object.getOwnPropertyNames(this.state.activeRect).length <= 0) {
+	  		this.setState({
+	  			colorMenuVisible: false
+	  		})
+	  	}
+  		e.stopPropagation()
+		e.preventDefault()
+  	}
+
+  	toggleLoadMenu(e) {
   		// Toggles visiblity of saved layouts
   		if (!this.state.history.length > 0) return
  
@@ -446,16 +531,50 @@ export default class App extends React.Component {
   		this.setState({
   			loadMenuVisible: menuVisible
   		})
+
+  		e.stopPropagation()
+		e.preventDefault()
+  	}
+
+  	deselectLoadMenu(e) {
+  		if (Object.getOwnPropertyNames(this.state.activeRect).length <= 0) {
+	  		this.setState({
+	  			loadMenuVisible: false
+	  		})
+	  	}
+  		e.stopPropagation()
+  		e.preventDefault()
+  	}
+
+  	handleOutsideClick(e) {
+  		// Handles clicksoutside selected components
+  		console.log(e)
+  		this.deselectRect(e)
+  		this.deselectColorMenu(e)
+  		this.deselectLoadMenu(e)
+  	}
+
+  	checkIfSaveNameExists(savename) {
+  		// Checks to see if a savename exists within an object of the history array. Returns a boolean
+  		for (let i=0; i < this.state.history.length; i++) {
+  			if (savename in (this.state.history[i])) {
+  				return true
+  			}
+  		}
+  		return false
   	}
 
 	render() {
 		const loadMenuStyle = (this.state.loadMenuVisible) ? {} : {visibility: 'hidden'}
+		const errorMsgStyle = (this.state.errorMsg) ? {visibility: 'visible'} : {}
+		const inputStyle = (this.state.errorMsg) ? {borderColor: 'red'} : {}
 		return (
-			<div>
+			<div onClick={this.handleOutsideClick} className="App">
 				<div className="dragspace">
 					{this.state.rects.map((rect, key) => {
 						return (
 							<Rectangle key={key}
+							activeRect = {this.state.activeRect}
 							rect={rect}
 							selectRect={this.selectRect}
 							deselectRect={this.deselectRect}
@@ -471,17 +590,17 @@ export default class App extends React.Component {
 						)
 					})}
 				</div>
-				<div className="new controls">
-					<div className="control-container">
+				<div className="new-controls">
+					<div className="control-container" >
 						<Add className="actions add" onClick={this.addRectangle}/>
 						<div className="tooltip">Add Rectangle</div>
 					</div>
-					<div className="control-container" onClick={this.removeRectangle}>
-						<Remove className="actions remove"/>
+					<div className="control-container">
+						<Remove className="actions remove" onClick={this.removeRectangle}/>
 						<div className="tooltip">Remove Rectangle</div>
 					</div>
-					<div className="control-container alternate" onClick={this.clearField}>
-						<Clear className="actions clear"/>
+					<div className="control-container alternate" >
+						<Clear className="actions clear nonsvg"onClick={this.clearField}/>
 						<div className="tooltip">Clear</div>
 					</div>
 					<div className="control-container alternate">
@@ -490,8 +609,8 @@ export default class App extends React.Component {
 							onClick={this.onSelectColor}
 							onKeyDown={this.onColorEnter}
 							colorMenuVisible={this.state.colorMenuVisible}/>
-						<div onClick={this.toggleColorMenu}>
-							<Color className="actions clear"/>
+						<div>
+							<Color className="actions color nonsvg" onClick={this.toggleColorMenu}/>
 							<div className="tooltip">Change Color</div>
 						</div>
 					</div>
@@ -499,15 +618,17 @@ export default class App extends React.Component {
 						<div style={{display: 'inline-block', position: 'relative'}}>
 							<input className="save-input"
 							placeholder="Enter Layout Name..."
+							onClick={this.onSaveClick}
 							onChange={this.onSaveChange} 
 							value={this.state.saveName} 
-							onKeyDown={this.onSaveEnter}/>
-							<div className="error-message">
+							onKeyDown={this.onSaveEnter}
+							style={inputStyle}/>
+							<div className="error-message" style={errorMsgStyle}>
 							Layout already exists with that name. Please choose another or remove that layout.
 							</div>
 						</div>
 						<div onClick={this.saveLayout} style={{display: 'inline-block', position: 'relative'}}>
-							<Save className="actions clear"/>
+							<Save className="actions save nonsvg"/>
 							<div className="tooltip">Save Layout</div>
 						</div>
 					</div>
@@ -516,19 +637,19 @@ export default class App extends React.Component {
 								{this.state.history.map((layout, key) => {
 									return (
 										<div key={key} className="load-wrapper" 
-										onClick={() => this.loadLayout(layout)}>
+										onClick={(e) => this.loadLayout(layout, e)}>
 											<li className="layout">
 												{Object.keys(layout)[0]}
 											</li>
 											<Clear className="remove-layout" 
-											onClick={() => this.removeLayout(layout)}/>
+											onClick={(e) => this.removeLayout(layout, e)}/>
 										</div>
 									)
 								})}
 							</div>
 							<div className='pointer' style={loadMenuStyle}/>
 						<div onClick={this.toggleLoadMenu}>
-							<Load className="actions clear"/>
+							<Load className="actions load nonsvg"/>
 							<div className="tooltip">Load Layout</div>
 						</div>
 					</div>

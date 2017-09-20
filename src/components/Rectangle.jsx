@@ -7,8 +7,9 @@ export default class Rectangle extends React.Component {
 	}
 
 	render() {
+		const cn = (this.props.activeRect == this.props.rect) ? 'active-rectangle' : 'rectangle'
 		return(
-			<button className='rectangle' style={this.props.rect} 
+			<button className={cn} style={this.props.rect} 
 			onMouseDown={(e) => this.props.onMouseDown(e, this.props.rect)}
 			onMouseUp={this.props.onMouseUp}
 			onMouseMove={this.props.onMouseMove}
@@ -52,5 +53,6 @@ Rectangle.propTypes = {
 	onMouseMoveSW: PropTypes.func,
 	onMouseMoveSE: PropTypes.func,
 	onMouseUp: PropTypes.func,
-	rect: PropTypes.object
+	rect: PropTypes.object,
+	activeRect: PropTypes.object
 }

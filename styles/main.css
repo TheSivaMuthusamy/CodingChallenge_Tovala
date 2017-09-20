@@ -25,10 +25,13 @@ ul, li {
 	cursor: move;
 }
 
-.rectangle:focus {
+.active-rectangle {
 	outline: none;
 	border: 2px solid #4fc3f7;
 	box-shadow: 0 0 10px #4fc3f7;
+	padding: 0;
+	position: absolute;
+	cursor: move;
 }
 
 .controls-wrapper {
@@ -41,27 +44,6 @@ ul, li {
 	height: 75px;	
 }
 
-.button {
-	width: 174.34px;
-	height: 30px;
-	color: #fff;
-	border: 2px solid #fff;
-	border-radius: 10px;
-	text-align: center;
-	font-size: 18px;
-	margin-left: 20px;
-	cursor: pointer; 
-	background-color: transparent;
-	outline: none;
-}
-
-.button:hover {
-	color: #00e676;
-	border-color: #00e676;
-}
-.controls {
-	display: inline-block;
-}
 .resize {
 	position: absolute;
     width: 20px;
@@ -126,7 +108,7 @@ ul, li {
     margin: 0px 6px 6px 0px;
 }
 
-.placeHolder {
+.placeholder {
 	background: rgb(240, 240, 240);
     height: 30px;
     width: 30px;
@@ -138,11 +120,11 @@ ul, li {
     justify-content: center;
 }
 
-.inputWrapper {
+.input-wrapper {
 	position: relative;
 }
 
-.colorInput {
+.color-input {
 	width: 100px;
     font-size: 14px;
     color: rgb(102, 102, 102);
@@ -166,19 +148,9 @@ ul, li {
     left: 16px;
 }
 
-/*.load-menu:after {
-	content: "";
-    position: absolute;
-    bottom: -40%;
-    left: 10%;
-    margin-left: -5px;
-    border-width: 9px;
-    border-style: solid;
-    border-color: rgb(235, 235, 243) transparent transparent transparent;
-}*/
 
-.new {
-	width: 800px;
+.new-control {
+	width: 1100px;
 	margin: 0 auto;
 }
 
@@ -238,7 +210,7 @@ ul, li {
     border-color: transparent transparent #555 transparent;
 }
 
-.clear {
+.nonsvg {
 	background-color: #EC407A;
 	fill: #FFF;
 	border: 0px solid rgba(0, 0, 0, 0.25);
@@ -248,12 +220,12 @@ ul, li {
     margin: 8.25px 6.25px 3.75px 6.25px
 }
 
-.clear:hover {
+.nonsvg:hover {
 	fill: #fff;
 	background-color: #F48FB1;
 }
 
-.clear + .tooltip {
+.nonsvg + .tooltip {
 	top: 76px;
 }
 
@@ -268,14 +240,11 @@ ul, li {
     padding-left: 8px;
     display: inline-block;
     vertical-align: 18.25px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 
 .load-wrapper {
 	text-align: left;
+	padding: 2px 0;
 }
 
 .load-wrapper:hover {
@@ -286,20 +255,30 @@ ul, li {
 }
 
 .layout {
-	display: inline-block;
-	vertical-align: 2px;
+	display: inline-table;
 	padding-left: 5px;
 	width: 80%;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	vertical-align: middle;
 }
 
 .remove-layout {
 	visibility: hidden;
 	opacity: 0;
     transition: opacity .6s;
-	display: inline-block;
+	display: inline-table;
+	height: 19px;
+	width: 19px;
+	vertical-align: middle;
+}
+
+.remove-layout:hover {
+	border: 0px solid rgba(0, 0, 0, 0.25);
+	border-radius: 10px;
+	background-color: rgb(15, 15, 15);
+	fill: #fff;
 }
 
 .load-wrapper:hover .remove-layout {
@@ -323,4 +302,5 @@ ul, li {
 	position: absolute;
 	font-size: 12px;
 	color: red;
+	top: 35px;
 }
