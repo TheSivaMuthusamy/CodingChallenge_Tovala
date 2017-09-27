@@ -15,7 +15,10 @@ export default class App extends React.Component {
 		const initialState = {
 			rects: [],
 			activeRect: {},
-			resizing: false,
+			resizingnw: false,
+			resizingne:	false,
+			resizingse: false,
+			resizingsw: false,
 			dragging: false,
 			rel : {
 				x: null,
@@ -53,6 +56,7 @@ export default class App extends React.Component {
 		this.onMouseMoveSE = this.onMouseMoveSE.bind(this);
 		this.onMouseMoveSW = this.onMouseMoveSW.bind(this);
 		this.onMouseMoveNW = this.onMouseMoveNW.bind(this);
+		this.onMouseMoveCanvas = this.onMouseMoveCanvas.bind(this);
 		this.onColorEnter = this.onColorEnter.bind(this);
 		this.saveLayout = this.saveLayout.bind(this);
 		this.loadLayout = this.loadLayout.bind(this);
@@ -238,8 +242,88 @@ export default class App extends React.Component {
 	onMouseDown(rect, e) {
 		// Sets initial mouse positioning and parameters before mouse transforming
 		this.setState({
-			resizing: true,
 			dragging: true,
+			rel: {
+				x: e.pageX,
+				y: e.pageY,
+			},
+			initWidth: rect.width,
+			initHeight: rect.height,
+			initTop: rect.top,
+			initLeft: rect.left,
+			activeRect: rect,
+			mfired: true,
+		});
+
+		e.stopPropagation()
+		e.preventDefault();
+		
+  	}
+
+  	onMouseDownNE(rect, e) {
+		// Sets initial mouse positioning and parameters before mouse transforming
+		this.setState({
+			resizingne: true,
+			rel: {
+				x: e.pageX,
+				y: e.pageY,
+			},
+			initWidth: rect.width,
+			initHeight: rect.height,
+			initTop: rect.top,
+			initLeft: rect.left,
+			activeRect: rect,
+			mfired: true,
+		});
+		
+		e.stopPropagation()
+		e.preventDefault();
+  	}
+
+  	onMouseDownSE(rect, e) {
+		// Sets initial mouse positioning and parameters before mouse transforming
+		this.setState({
+			resizingse: true,
+			rel: {
+				x: e.pageX,
+				y: e.pageY,
+			},
+			initWidth: rect.width,
+			initHeight: rect.height,
+			initTop: rect.top,
+			initLeft: rect.left,
+			activeRect: rect,
+			mfired: true,
+		});
+		
+		e.stopPropagation()
+		e.preventDefault();
+  	}
+
+  	onMouseDownNW(rect, e) {
+		// Sets initial mouse positioning and parameters before mouse transforming
+		this.setState({
+			resizingnw: true,
+			rel: {
+				x: e.pageX,
+				y: e.pageY,
+			},
+			initWidth: rect.width,
+			initHeight: rect.height,
+			initTop: rect.top,
+			initLeft: rect.left,
+			activeRect: rect,
+			mfired: true,
+		});
+		
+		e.stopPropagation()
+		e.preventDefault();
+  	}
+
+  	onMouseDownSW(rect, e) {
+		// Sets initial mouse positioning and parameters before mouse transforming
+		this.setState({
+			resizingsw: true,
 			rel: {
 				x: e.pageX,
 				y: e.pageY,
@@ -259,7 +343,10 @@ export default class App extends React.Component {
   	onMouseLeave() {
   		// Sets certain values to false so resizing can't happen after mouse leaves the area
   		this.setState({
-  			resizing: false,
+  			resizingnw: false,
+  			resizingne: false,
+  			resizingse: false,
+  			resizingsw: false,
   			dragging: false,
   			mfired: false,
   		});
@@ -289,7 +376,7 @@ export default class App extends React.Component {
 
   	onMouseMoveNE(e) {
   		// Handler for top right corner of rectangle. Handles reisizing logic
-  		if (!this.state.resizing) return
+  		if (!this.state.resizingne) return
   			
   			const rect = Object.assign({},this.state.activeRect);
 	  		const nWidth = (parseInt(this.state.initWidth,10) + e.pageX - this.state.rel.x);											
@@ -316,7 +403,7 @@ export default class App extends React.Component {
 
   	onMouseMoveSE(e) {
   		// Handler for bottom right corner of rectangle. Handles reisizing logic
-  		if (!this.state.resizing) return
+  		if (!this.state.resizingse) return
   			
   			const rect = Object.assign({},this.state.activeRect);
   			const nWidth = (parseInt(this.state.initWidth,10) + e.pageX - this.state.rel.x);
@@ -342,7 +429,7 @@ export default class App extends React.Component {
 
   	onMouseMoveSW(e) {
   		// Handler for bottom left corner of rectangle. Handles reisizing logic
-  		if (!this.state.resizing) return
+  		if (!this.state.resizingsw) return
   			
   			const rect = Object.assign({},this.state.activeRect);
   			const nWidth = parseInt(this.state.initWidth,10) - e.pageX + this.state.rel.x;
@@ -369,7 +456,7 @@ export default class App extends React.Component {
 
   	onMouseMoveNW(e) {
   		// Handler for top right corner of rectangle. Handles reisizing logic
-  		if (!this.state.resizing) return
+  		if (!this.state.resizingnw) return
   			
   			const rect = Object.assign({},this.state.activeRect);
   			const nWidth = (parseInt(this.state.initWidth,10) - e.pageX + this.state.rel.x);
@@ -396,10 +483,115 @@ export default class App extends React.Component {
   	onMouseUp(e) {
   		// Sets certain state values to false after mouse up event
   		this.setState({
-  			resizing: false,
+  			resizingnw: false,
+  			resizingne: false,
+  			resizingse: false,
+  			resizingsw: false,
   			dragging: false,
   		});
   		
+  		e.stopPropagation()
+    	e.preventDefault()
+  	}
+
+  	onMouseMoveCanvas(e) {
+  		if(this.state.dragging) { 			
+  			const rect = Object.assign({},this.state.activeRect);
+	  		const clone = (this.state.rects).slice(0);
+	  		const index = clone.indexOf(this.state.activeRect);
+	  		const nX = (parseInt(this.state.initLeft,10) + e.pageX - this.state.rel.x);
+	  		const nY = (parseInt(this.state.initTop,10) + e.pageY - this.state.rel.y);
+	  		rect.left = this.checkXBounds(nX, this.state.activeRect) + 'px';
+	  		rect.top = this.checkYBounds(nY, this.state.activeRect) + 'px';
+	  		clone[index] = rect;
+	  		
+	  		this.setState({
+	  			rects: clone,
+	  			activeRect: rect
+	  		});
+	  	}
+
+	  	if(this.state.resizingne) {
+	  		const rect = Object.assign({},this.state.activeRect);
+	  		const nWidth = (parseInt(this.state.initWidth,10) + e.pageX - this.state.rel.x);											
+	  		const nHeight = (parseInt(this.state.initHeight,10) - e.pageY + this.state.rel.y);
+	  		const nTop = (parseInt(this.state.initTop,10) + e.pageY - this.state.rel.y);
+	  		const clone = (this.state.rects).slice(0);
+	  		const index = clone.indexOf(this.state.activeRect);
+	  		rect.width = (nWidth + parseInt(this.state.activeRect.left,10) > 1200) ? 
+	  											(1200 - parseInt(this.state.activeRect.left,10) + 'px') 
+	  											: (nWidth + 'px');
+	 
+	  		rect.top = (nTop < 0) ? (0 + 'px') : (nTop + 'px');
+	  		rect.height = (nTop < 0)? this.state.activeRect.height : (nHeight + 'px');
+	  		clone[index] = rect;
+	  		
+	  		this.setState({
+	  			rects: clone,
+	  			activeRect: rect
+	  		});
+	  	}
+
+	  	if(this.state.resizingse) {
+	  		const rect = Object.assign({},this.state.activeRect);
+  			const nWidth = (parseInt(this.state.initWidth,10) + e.pageX - this.state.rel.x);
+	  		const nHeight = (parseInt(this.state.initHeight,10) + e.pageY - this.state.rel.y);
+	  		const clone = (this.state.rects).slice(0);
+	  		const index = clone.indexOf(this.state.activeRect);
+	  		rect.width = (nWidth + parseInt(this.state.activeRect.left,10) > 1200) ? 
+	  												(1200 - parseInt(this.state.activeRect.left,10) + 'px') 
+	  												: (nWidth + 'px');
+	  		rect.height = (nHeight + parseInt(this.state.activeRect.top,10) > 640) ?
+	  												(640 - parseInt(this.state.activeRect.top,10) + 'px') 
+	  												: (nHeight + 'px');								  	
+	  		clone[index] = rect;
+	  		
+	  		this.setState({
+	  			rects: clone,
+	  			activeRect: rect
+	  		});
+	  	}
+
+	  	if(this.state.resizingnw) {
+	  		const rect = Object.assign({},this.state.activeRect);
+  			const nWidth = (parseInt(this.state.initWidth,10) - e.pageX + this.state.rel.x);
+  			const nLeft = (parseInt(this.state.initLeft,10) + e.pageX - this.state.rel.x);
+  			const nHeight = (parseInt(this.state.initHeight,10) - e.pageY + this.state.rel.y);
+	  		const nTop = (parseInt(this.state.initTop,10) + e.pageY - this.state.rel.y);
+	  		const clone = (this.state.rects).slice(0);
+	  		const index = clone.indexOf(this.state.activeRect);
+	  		rect.top = (nTop < 0) ? (0 + 'px') : (nTop + 'px');
+	  		rect.height = (nTop < 0)? this.state.activeRect.height : (nHeight + 'px');
+	  		rect.left = (nLeft < 0) ? (0 + 'px') : (nLeft + 'px');
+	  		rect.width = (nLeft < 0) ? this.state.activeRect.width : (nWidth + 'px');
+	  		clone[index] = rect;
+	  		
+	  		this.setState({
+	  			rects: clone,
+	  			activeRect: rect
+	  		});
+	  	}
+  		
+  		if(this.state.resizingsw) {
+  			const rect = Object.assign({},this.state.activeRect);
+  			const nWidth = parseInt(this.state.initWidth,10) - e.pageX + this.state.rel.x;
+  			const nLeft = (parseInt(rect.left,10) < 0) ? 0 
+  									: (parseInt(this.state.initLeft,10) + e.pageX - this.state.rel.x);
+  			const nHeight = (parseInt(this.state.initHeight,10) + e.pageY - this.state.rel.y);
+	  		const clone = (this.state.rects).slice(0);
+	  		const index = clone.indexOf(this.state.activeRect);
+	  		rect.height = (nHeight + parseInt(this.state.activeRect.top,10) > 640) ?
+	  												(640 - parseInt(this.state.activeRect.top,10) + 'px') 
+	  												: (nHeight + 'px');
+	  		rect.left = (nLeft < 0) ? (0 + 'px') : (nLeft + 'px');
+	  		rect.width = (nLeft < 0) ? this.state.activeRect.width : (nWidth + 'px');
+	  		clone[index] = rect;
+	  		
+	  		this.setState({
+	  			rects: clone,
+	  			activeRect: rect
+	  		})
+  		}
   		e.stopPropagation()
     	e.preventDefault()
   	}
@@ -566,7 +758,10 @@ export default class App extends React.Component {
 		const inputStyle = (this.state.errorMsg) ? {borderColor: 'red'} : {}
 		return (
 			<div onClick={this.handleOutsideClick} className="App">
-				<div className="dragspace">
+				<div className="dragspace" 
+				onMouseMove={this.onMouseMoveCanvas}
+				onMouseLeave={this.onMouseLeave}
+				>
 					{this.state.rects.map((rect, key) => {
 						return (
 							<Rectangle key={key}
@@ -575,13 +770,16 @@ export default class App extends React.Component {
 							selectRect={this.selectRect}
 							deselectRect={this.deselectRect}
 							onMouseDown={this.onMouseDown.bind(this, rect)}
+							onMouseDownNE={this.onMouseDownNE.bind(this, rect)}
+							onMouseDownSE={this.onMouseDownSE.bind(this, rect)}
+							onMouseDownSW={this.onMouseDownSW.bind(this, rect)}
+							onMouseDownNW={this.onMouseDownNW.bind(this, rect)}
 							onMouseUp={this.onMouseUp}
 							onMouseMoveNE={this.onMouseMoveNE}
 							onMouseMoveSE={this.onMouseMoveSE}
 							onMouseMoveSW={this.onMouseMoveSW}
 							onMouseMoveNW={this.onMouseMoveNW}
 							onMouseMove={this.onMouseMove}
-							onMouseLeave={this.onMouseLeave}
 							/>
 						)
 					})}

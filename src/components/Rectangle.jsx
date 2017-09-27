@@ -13,31 +13,26 @@ export default class Rectangle extends React.Component {
 			onMouseDown={(e) => this.props.onMouseDown(e, this.props.rect)}
 			onMouseUp={this.props.onMouseUp}
 			onMouseMove={this.props.onMouseMove}
-			onMouseLeave={this.props.onMouseLeave}
 			>
 				<div className="ne resize" 
-				onMouseDown={(e) => this.props.onMouseDown(e, this.props.rect)}
+				onMouseDown={(e) => this.props.onMouseDownNE(e, this.props.rect)}
 				onMouseUp={this.props.onMouseUp}
 				onMouseMove={this.props.onMouseMoveNE}
-				onMouseLeave={this.props.onMouseLeave}
 				/>
 				<div className="se resize"
-				onMouseDown={(e) => this.props.onMouseDown(e, this.props.rect)}
+				onMouseDown={(e) => this.props.onMouseDownSE(e, this.props.rect)}
 				onMouseUp={this.props.onMouseUp}
 				onMouseMove={this.props.onMouseMoveSE}
-				onMouseLeave={this.props.onMouseLeave}
 				/>
 				<div className="sw resize"
-				onMouseDown={(e) => this.props.onMouseDown(e, this.props.rect)}
+				onMouseDown={(e) => this.props.onMouseDownSW(e, this.props.rect)}
 				onMouseUp={this.props.onMouseUp}
 				onMouseMove={this.props.onMouseMoveSW}
-				onMouseLeave={this.props.onMouseLeave}
 				/>
 				<div className="nw resize"
-				onMouseDown={(e) => this.props.onMouseDown(e, this.props.rect)}
+				onMouseDown={(e) => this.props.onMouseDownNW(e, this.props.rect)}
 				onMouseUp={this.props.onMouseUp}
 				onMouseMove={this.props.onMouseMoveNW}
-				onMouseLeave={this.props.onMouseLeave}
 				/>
 			</button>
 		)
